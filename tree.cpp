@@ -1,49 +1,55 @@
 #include "tree.h"
-
+#include <QDebug>
 
 Tree::Tree(){
     root = 0;
 }
+//----------------------------------------------------------------------------------//
 void Tree::add(Node *node){
     root = node;
 }
-
+//----------------------------------------------------------------------------------//
 Node *Tree::getRoot(){
     return root;
 }
-QByteArray Tree::treeRepresentation(Node *node, QVector<QByteArray> &cod)
-{
+//----------------------------------------------------------------------------------//
+QByteArray Tree::treeRepresent(Node *node, QVector<QByteArray> &cod){
 
-    if(!node->left && !node->right)
-    {
-        QByteArray ret;
-        if(node->content == 0x21)
-        {
-            ret.append(0x2A);
-            ret.append(0x21);
+    if(!node->left && !node->right){
+        QByteArray represent;
+        if(node->content == 0x21){
+            represent.append(0x2A).append(0x21);
         }
-        else if(node->content == 0x2A)
-        {
-            ret.append(0x2A);
-            ret.append(0x2A);
+        else if(node->content == 0x2A){
+            represent.append(0x2A).append(0x2A);
         }
         else
-            ret.append(node->content);
+            represent.append(node->content);
         cod[node->content] = node->code;
-        return ret;
+        return represent;
     }
-    else
-    {
-        QByteArray codd(node->code);
-        node->left->code = codd.append("0");
-        codd.remove(codd.size() - 1, 1);
-        node->right->code = codd.append("1");
+    else{
+        QByteArray auxiliar(node->code);
+        node->left->code = auxiliar.append("0");
+        auxiliar.remove(auxiliar.size() - 1, 1);
+        node->right->code = auxiliar.append("1");
     }
-    return QByteArray().append(0x21).append(treeRepresentation(node->left, cod))
-            .append(treeRepresentation(node->right, cod));
+    return QByteArray().append(0x21).append(treeRepresent(node->left, cod)).append(treeRepresent(node->right, cod));
 }
-
-QByteArray Tree::treeRepresentation(QVector<QByteArray> &cod)
-{
-    return treeRepresentation(root, cod);
+//----------------------------------------------------------------------------------//
+void Tree::DescompressTree(Node *node, QByteArray &data){
+   if(data.at(0) == 0x21){
+       node->left = new Node;
+       node->right = new Node;
+       data.remove(0,1);
+       DescompressTree(node->left, data);
+       data.remove(0,1);
+       DescompressTree(node->right, data);
+   }
+   else if(data.at(0) == 0x2A){
+       node->content = data.at(1);
+       data.remove(0,1);
+   }
+   else
+       node->content = data.at(0);
 }

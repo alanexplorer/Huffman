@@ -7,15 +7,14 @@
 
 using namespace std;
 
-class Tree
-{
+class Tree{
     Node *root;
 public:
     Tree();
     void add(Node *node); //Cria a arvore
     Node *getRoot(); // retorna a raiz
-    QByteArray treeRepresentation(Node *node, QVector<QByteArray> &cod); // retorna a representação da árvore
-    QByteArray treeRepresentation(QVector<QByteArray> &cod); // retorna a representação da árvore
+    QByteArray treeRepresent(Node *node, QVector<QByteArray> &cod);
+    void DescompressTree(Node *node, QByteArray &data);
 
 
 };
