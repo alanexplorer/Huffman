@@ -13,15 +13,22 @@ Node *Tree::getRoot(){
     return root;
 }
 //----------------------------------------------------------------------------------//
-QByteArray Tree::treeRepresent(Node *node, QVector<QByteArray> &cod){
+bool Tree::leaf(Node *node){
+    if(node->left && node->left)
+        return false;
+    else
+        return true;
+}
+//----------------------------------------------------------------------------------//
+QByteArray Tree::buildTree(Node *node, QVector<QByteArray> &cod){
 
-    if(!node->left && !node->right){
+    if(leaf(node)){
         QByteArray represent;
-        if(node->content == 0x21){
-            represent.append(0x2A).append(0x21);
+        if(node->content == 0x2A){
+            represent.append(0x21).append(0x2A);
         }
-        else if(node->content == 0x2A){
-            represent.append(0x2A).append(0x2A);
+        else if(node->content == 0x21){
+            represent.append(0x21).append(0x21);
         }
         else
             represent.append(node->content);
@@ -34,19 +41,19 @@ QByteArray Tree::treeRepresent(Node *node, QVector<QByteArray> &cod){
         auxiliar.remove(auxiliar.size() - 1, 1);
         node->right->code = auxiliar.append("1");
     }
-    return QByteArray().append(0x21).append(treeRepresent(node->left, cod)).append(treeRepresent(node->right, cod));
+    return QByteArray().append(0x2A).append(buildTree(node->left, cod)).append(buildTree(node->right, cod));
 }
 //----------------------------------------------------------------------------------//
-void Tree::DescompressTree(Node *node, QByteArray &data){
-   if(data.at(0) == 0x21){
+void Tree::mountTree(Node *node, QByteArray &data){
+   if(data.at(0) == 0x2A){
        node->left = new Node;
        node->right = new Node;
        data.remove(0,1);
-       DescompressTree(node->left, data);
+       mountTree(node->left, data);
        data.remove(0,1);
-       DescompressTree(node->right, data);
+       mountTree(node->right, data);
    }
-   else if(data.at(0) == 0x2A){
+   else if(data.at(0) == 0x21){
        node->content = data.at(1);
        data.remove(0,1);
    }

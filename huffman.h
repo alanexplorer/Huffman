@@ -18,15 +18,15 @@ using namespace std;
 class Huffman{
 public:
     Huffman();
-    void comprimir(QString entrada);
-    void descomprimir (QString saida);
+    void comprimir(QString entrada, QString saida);
+    void descomprimir (QString saida, QString local);
     QByteArray fileCod(QByteArray data, QVector<QByteArray> codes);
     void Size(QByteArray &codification, QByteArray &Data, QByteArray &represent);
     QString NameOut(QString Out);
     void print(Node *node,int depth); //imprime a arvore
     void getHead(QByteArray bytes, int &sizeTrash, int &sizeTree, int &sizeName);
-    void decode(QBitArray &bit,QByteArray bytes, int index);
     void NewFile(QString Out, Tree &arvore, Node *node, QBitArray bit, QByteArray &code, int trash);
+    bool ifHuffman(QString Huffman);
 
 };
 

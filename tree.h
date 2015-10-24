@@ -13,8 +13,9 @@ public:
     Tree();
     void add(Node *node); //Cria a arvore
     Node *getRoot(); // retorna a raiz
-    QByteArray treeRepresent(Node *node, QVector<QByteArray> &cod);
-    void DescompressTree(Node *node, QByteArray &data);
+    bool leaf(Node *node); //verifica se é folha
+    QByteArray buildTree(Node *node, QVector<QByteArray> &cod);
+    void mountTree(Node *node, QByteArray &data);
 
 
 };

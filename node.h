@@ -11,10 +11,10 @@ public:
     int frequencia;
     QByteArray code;
     Node(){
-        this->content = 0;
-        this->left = 0;
-        this->right = 0;
-        this->frequencia = 0;
+        content = 0;
+        left = 0;
+        right = 0;
+        frequencia = 0;
     }
     Node(unsigned char content, Node* left, Node* right, int frequencia){
         this->content = content;
