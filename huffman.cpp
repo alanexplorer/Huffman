@@ -11,7 +11,7 @@ bool lessthan(Node *a, Node *b){
 }
 //----------------------------------------------------------------------------------//
 
-QByteArray Huffman::fileCod(QByteArray data, QVector<QByteArray> codes){
+QByteArray Huffman::fileCod(QByteArray data, QHash<int, QByteArray> codes){
     QByteArray codification;
     for(int i = 0; i < data.size(); ++i)
         codification.append(codes[(unsigned char)data.at(i)]);
@@ -72,7 +72,8 @@ void Huffman::comprimir(QString entrada, QString saida){
     }
     tree.add(ListNode.at(0));
     //print(node,0);//Imprime a arvore
-    QVector<QByteArray>cod(ascii); //guarda o valor de cada byte em bit na árvore
+    QHash<int, QByteArray> cod;
+    //QVector<QByteArray>cod(ascii); //guarda o valor de cada byte em bit na árvore
 
     QByteArray Coding, lixo;
     QByteArray represent = tree.buildTree(node, cod);

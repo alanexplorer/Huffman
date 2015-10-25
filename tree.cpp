@@ -20,7 +20,7 @@ bool Tree::leaf(Node *node){
         return true;
 }
 //----------------------------------------------------------------------------------//
-QByteArray Tree::buildTree(Node *node, QVector<QByteArray> &cod){
+QByteArray Tree::buildTree(Node *node, QHash<int, QByteArray> &cod){
 
     if(leaf(node)){
         QByteArray represent;

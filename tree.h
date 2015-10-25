@@ -2,7 +2,7 @@
 #define TREE_H
 #include "node.h"
 #include <iostream>
-#include <QVector>
+#include <QHash>
 #include <QByteArray>
 
 using namespace std;
@@ -14,7 +14,7 @@ public:
     void add(Node *node); //Cria a arvore
     Node *getRoot(); // retorna a raiz
     bool leaf(Node *node); //verifica se é folha
-    QByteArray buildTree(Node *node, QVector<QByteArray> &cod);
+    QByteArray buildTree(Node *node, QHash<int, QByteArray> &cod);
     void mountTree(Node *node, QByteArray &data);
 
 

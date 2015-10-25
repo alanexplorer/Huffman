@@ -9,8 +9,7 @@
 #include <QBitArray>
 #include <iostream>
 #include <QList>
-#include <QtAlgorithms>
-#include <QVector>
+#include <QHash>
 #include <QDir>
 
 using namespace std;
@@ -20,7 +19,7 @@ public:
     Huffman();
     void comprimir(QString entrada, QString saida);
     void descomprimir (QString saida, QString local);
-    QByteArray fileCod(QByteArray data, QVector<QByteArray> codes);
+    QByteArray fileCod(QByteArray data, QHash<int, QByteArray> codes);
     void Size(QByteArray &codification, QByteArray &Data, QByteArray &represent);
     QString NameOut(QString Out);
     void print(Node *node,int depth); //imprime a arvore
