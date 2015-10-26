@@ -37,8 +37,11 @@ QByteArray Tree::buildTree(Node *node, QHash<int, QByteArray> &cod){
     }
     else{
         QByteArray auxiliar(node->code);
+
         node->left->code = auxiliar.append("0");
+
         auxiliar.remove(auxiliar.size() - 1, 1);
+
         node->right->code = auxiliar.append("1");
     }
     return QByteArray().append(0x2A).append(buildTree(node->left, cod)).append(buildTree(node->right, cod));

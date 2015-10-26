@@ -11,10 +11,26 @@ bool lessthan(Node *a, Node *b){
 }
 //----------------------------------------------------------------------------------//
 
-QByteArray Huffman::fileCod(QByteArray data, QHash<int, QByteArray> codes){
+QByteArray Huffman::fileCod(QByteArray data, QByteArray &trash, QHash<int, QByteArray> codes){
+
+    //Codifica o arquivo com os valores da árvore
+
     QByteArray codification;
     for(int i = 0; i < data.size(); ++i)
         codification.append(codes[(unsigned char)data.at(i)]);
+
+    //Guarda o lixo em valores de bytes
+
+    for (int i = 0, sum = 0, index = 7; i < codification.size(); ++i, --index) {
+        if(codification.at(i) == 49)
+            sum+=(1 << index);
+        if(index == 0 || i == codification.size()-1){
+            trash.append(sum);
+            sum = 0;
+            index = 8;
+        }
+    }
+
     return codification;
 }
 //----------------------------------------------------------------------------------//
@@ -73,23 +89,10 @@ void Huffman::comprimir(QString entrada, QString saida){
     tree.add(ListNode.at(0));
     //print(node,0);//Imprime a arvore
     QHash<int, QByteArray> cod;
-    //QVector<QByteArray>cod(ascii); //guarda o valor de cada byte em bit na árvore
 
     QByteArray Coding, lixo;
     QByteArray represent = tree.buildTree(node, cod);
-    Coding = fileCod(Data, cod); //representação binária da árvore
-
-    //Guarda o lixo em valores de bytes
-
-    for (int i = 0, sum = 0, index = 7; i < Coding.size(); ++i, --index) {
-        if(Coding.at(i) == 49)
-            sum+=(1 << index);
-        if(index == 0 || i == Coding.size()-1){
-            lixo.append(sum);
-            sum = 0;
-            index = 8;
-        }
-    }
+    Coding = fileCod(Data, lixo, cod); //representação binária da árvore
 
     QByteArray DataOut; // recebe o conteúdo codificado
     Size(Coding, DataOut, represent);
