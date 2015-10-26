@@ -1,4 +1,5 @@
 #include "huffman.h"
+#include <QDebug>
 #define ascii 256
 
 Huffman::Huffman(){
@@ -200,25 +201,26 @@ void Huffman::NewFile(QString Out, Tree &arvore, Node *node,QBitArray bit, QByte
 
     QFile NewFile(Out);
     if(!NewFile.open(QIODevice::WriteOnly)){
-        qDebug()<<"houve um problema para escrever o arquivo";
-        exit(1);
+        qFatal("houve um problema para escrever o arquivo");
+        //exit(1);
     }
     node = arvore.getRoot();
 
-    for (int i=0; i < bit.size()- trash; ++i) {
-        if(!arvore.leaf(node)){
-            if(!bit[i])
-                node = node->left;
-            else
-                node = node->right;
-        }
+    const int limit = bit.size() - trash;
+    for (int i = 0; i < limit; ++i) {
         if(arvore.leaf(node)){
             code.append(node->content);
             node = arvore.getRoot();
+        } else {
+            if(bit[i])
+                node = node->right;
+            else
+                node = node->left;
         }
     }
     NewFile.write(code);
     NewFile.close();
+//    exit(0);
 }
 
 //----------------------------------------------------------------------------------//
