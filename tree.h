@@ -11,12 +11,11 @@ class Tree{
     Node *root;
 public:
     Tree();
-    void add(Node *node); //Cria a arvore
+    void add(Node *node); //adiciona os nós na arvore
     Node *getRoot(); // retorna a raiz
     bool leaf(Node *node); //verifica se é folha
     QByteArray buildTree(Node *node, QHash<int, QByteArray> &cod);
     void mountTree(Node *node, QByteArray &data);
-
 
 };
 

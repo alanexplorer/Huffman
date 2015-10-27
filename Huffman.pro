@@ -1,25 +1,25 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2015-05-27T12:55:45
+# Project created by QtCreator 2015-10-27T11:42:04
 #
 #-------------------------------------------------
 
-QT       += core
+QT       += core multimedia
 
-QT       -= gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Huffman
-CONFIG   += console
-CONFIG   -= app_bundle
-
 TEMPLATE = app
 
 
-SOURCES += main.cpp \
-    tree.cpp \
-    huffman.cpp
+SOURCES += main.cpp\
+        gui.cpp \
+    huffman.cpp \
+    tree.cpp
 
-HEADERS += \
-    tree.h \
+HEADERS  += gui.h \
     huffman.h \
+    tree.h \
     node.h
+
+FORMS    += gui.ui

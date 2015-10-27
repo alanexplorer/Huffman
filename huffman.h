@@ -1,5 +1,6 @@
 #ifndef HUFFMAN_H
 #define HUFFMAN_H
+
 #include "tree.h"
 #include "node.h"
 #include <QString>
@@ -24,9 +25,8 @@ public:
     QString NameOut(QString Out);
     void print(Node *node,int depth); //imprime a arvore
     void getHead(QByteArray bytes, int &sizeTrash, int &sizeTree, int &sizeName);
-    void NewFile(QString Out, Tree &arvore, Node *node, QBitArray bit, QByteArray &code, int trash);
-    bool ifHuffman(QString Huffman);
+    void Decoding(Tree &arvore, Node *node, QBitArray bit, QByteArray &code, int trash);
+    bool IfHuff(QString Huffman);
 
 };
-
 #endif // HUFFMAN_H
