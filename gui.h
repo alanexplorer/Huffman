@@ -7,6 +7,8 @@
 #include <QMessageBox>
 #include <QObject>
 #include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QFileInfo>
 #include<QString>
 
 

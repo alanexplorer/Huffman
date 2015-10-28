@@ -110,8 +110,6 @@ void Huffman::comprimir(QString entrada, QString saida){
     newfile.close(); // Compressão concluída.
 
     qDebug()<<"Compressão realizada!";
-
-    exit(0);
 }
 
 //----------------------------------------------------------------------------------//
@@ -271,6 +269,4 @@ void Huffman::descomprimir(QString saida, QString local){
     NewFile.close();
 
     qDebug()<<"Descompressão realizada !";
-
-    exit(0);
 }
