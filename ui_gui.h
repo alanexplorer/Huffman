@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -21,7 +22,6 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
-#include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -30,7 +30,6 @@ class Ui_Gui
 {
 public:
     QWidget *centralWidget;
-    QLabel *label_picture;
     QLabel *labelCompress;
     QPushButton *NavCompress_bt;
     QTextEdit *nav_txt;
@@ -44,7 +43,10 @@ public:
     QLabel *NameResult;
     QLabel *TypeResult;
     QLabel *SizeResult;
-    QToolBar *mainToolBar;
+    QLabel *labelOut;
+    QTextEdit *nav_Out;
+    QPushButton *NavLocalOut_bt;
+    QCheckBox *checkBox_OutNav;
     QStatusBar *statusBar;
     QMenuBar *menuBar;
 
@@ -52,12 +54,9 @@ public:
     {
         if (Gui->objectName().isEmpty())
             Gui->setObjectName(QStringLiteral("Gui"));
-        Gui->resize(500, 270);
+        Gui->resize(500, 300);
         centralWidget = new QWidget(Gui);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        label_picture = new QLabel(centralWidget);
-        label_picture->setObjectName(QStringLiteral("label_picture"));
-        label_picture->setGeometry(QRect(390, 85, 85, 85));
         labelCompress = new QLabel(centralWidget);
         labelCompress->setObjectName(QStringLiteral("labelCompress"));
         labelCompress->setGeometry(QRect(130, 10, 211, 16));
@@ -70,40 +69,51 @@ public:
         nav_txt->setGeometry(QRect(80, 40, 300, 23));
         Decopress_bt = new QPushButton(centralWidget);
         Decopress_bt->setObjectName(QStringLiteral("Decopress_bt"));
-        Decopress_bt->setGeometry(QRect(250, 80, 80, 21));
+        Decopress_bt->setGeometry(QRect(400, 160, 80, 21));
         labelEnter = new QLabel(centralWidget);
         labelEnter->setObjectName(QStringLiteral("labelEnter"));
         labelEnter->setGeometry(QRect(30, 50, 47, 13));
         Compress_bt = new QPushButton(centralWidget);
         Compress_bt->setObjectName(QStringLiteral("Compress_bt"));
-        Compress_bt->setGeometry(QRect(130, 80, 80, 21));
+        Compress_bt->setGeometry(QRect(280, 160, 80, 21));
         line = new QFrame(centralWidget);
         line->setObjectName(QStringLiteral("line"));
-        line->setGeometry(QRect(10, 170, 471, 41));
+        line->setGeometry(QRect(10, 210, 471, 41));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
         NameFile = new QLabel(centralWidget);
         NameFile->setObjectName(QStringLiteral("NameFile"));
-        NameFile->setGeometry(QRect(31, 121, 45, 16));
+        NameFile->setGeometry(QRect(31, 131, 45, 16));
         Type = new QLabel(centralWidget);
         Type->setObjectName(QStringLiteral("Type"));
-        Type->setGeometry(QRect(31, 140, 24, 16));
+        Type->setGeometry(QRect(31, 150, 24, 16));
         Size = new QLabel(centralWidget);
         Size->setObjectName(QStringLiteral("Size"));
-        Size->setGeometry(QRect(31, 159, 19, 16));
+        Size->setGeometry(QRect(31, 169, 19, 16));
         NameResult = new QLabel(centralWidget);
         NameResult->setObjectName(QStringLiteral("NameResult"));
-        NameResult->setGeometry(QRect(90, 120, 241, 16));
+        NameResult->setGeometry(QRect(90, 130, 161, 16));
         TypeResult = new QLabel(centralWidget);
         TypeResult->setObjectName(QStringLiteral("TypeResult"));
-        TypeResult->setGeometry(QRect(90, 140, 241, 16));
+        TypeResult->setGeometry(QRect(90, 150, 161, 16));
         SizeResult = new QLabel(centralWidget);
         SizeResult->setObjectName(QStringLiteral("SizeResult"));
-        SizeResult->setGeometry(QRect(90, 160, 241, 16));
+        SizeResult->setGeometry(QRect(90, 170, 171, 16));
+        labelOut = new QLabel(centralWidget);
+        labelOut->setObjectName(QStringLiteral("labelOut"));
+        labelOut->setGeometry(QRect(30, 90, 47, 13));
+        nav_Out = new QTextEdit(centralWidget);
+        nav_Out->setObjectName(QStringLiteral("nav_Out"));
+        nav_Out->setEnabled(false);
+        nav_Out->setGeometry(QRect(80, 80, 300, 23));
+        NavLocalOut_bt = new QPushButton(centralWidget);
+        NavLocalOut_bt->setObjectName(QStringLiteral("NavLocalOut_bt"));
+        NavLocalOut_bt->setEnabled(false);
+        NavLocalOut_bt->setGeometry(QRect(390, 80, 80, 21));
+        checkBox_OutNav = new QCheckBox(centralWidget);
+        checkBox_OutNav->setObjectName(QStringLiteral("checkBox_OutNav"));
+        checkBox_OutNav->setGeometry(QRect(280, 110, 101, 19));
         Gui->setCentralWidget(centralWidget);
-        mainToolBar = new QToolBar(Gui);
-        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
-        Gui->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(Gui);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         Gui->setStatusBar(statusBar);
@@ -120,7 +130,6 @@ public:
     void retranslateUi(QMainWindow *Gui)
     {
         Gui->setWindowTitle(QApplication::translate("Gui", "Huffman", 0));
-        label_picture->setText(QString());
         labelCompress->setText(QApplication::translate("Gui", "Enter with file to compress or descompress", 0));
         NavCompress_bt->setText(QApplication::translate("Gui", "Browser", 0));
 #ifndef QT_NO_TOOLTIP
@@ -141,6 +150,18 @@ public:
         NameResult->setText(QString());
         TypeResult->setText(QString());
         SizeResult->setText(QString());
+        labelOut->setText(QApplication::translate("Gui", "Out", 0));
+#ifndef QT_NO_TOOLTIP
+        nav_Out->setToolTip(QString());
+#endif // QT_NO_TOOLTIP
+#ifndef QT_NO_STATUSTIP
+        nav_Out->setStatusTip(QString());
+#endif // QT_NO_STATUSTIP
+#ifndef QT_NO_ACCESSIBILITY
+        nav_Out->setAccessibleName(QString());
+#endif // QT_NO_ACCESSIBILITY
+        NavLocalOut_bt->setText(QApplication::translate("Gui", "Browser", 0));
+        checkBox_OutNav->setText(QApplication::translate("Gui", "Enable local exit", 0));
     } // retranslateUi
 
 };

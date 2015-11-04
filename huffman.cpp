@@ -56,8 +56,7 @@ void Huffman::comprimir(QString Input, QString exit){
     QFile file(Input);
 
     if(!file.open(QIODevice::ReadOnly)){
-        cout<<"O arquivo n"<<char(198)<<"o pode ser aberto\n";
-        exit(1);
+        qFatal("houve um problema para escrever o arquivo");
     }
     QByteArray Data; //Recebe todo o conteúdo do arquivo
     while(!file.atEnd()){
@@ -102,12 +101,13 @@ void Huffman::comprimir(QString Input, QString exit){
 
     if(exit.isEmpty())
         exit = NameOut(Input);
+    else
+        exit += '/' + NameOut(GetName.fileName());
 
     QFile newfile(exit); // Criação do arquivo comprimido
-    if(!newfile.open(QIODevice::WriteOnly)){
-        cout<< "Ocorreu um erro ao criar o arquivo comprimido !\n";
-        exit(1);
-    }
+    if(!newfile.open(QIODevice::WriteOnly))
+        qFatal("Ocorreu um erro ao criar o arquivo comprimido !");
+
     newfile.write(DataOut);
     newfile.close(); // Compressão concluída.
 
@@ -227,10 +227,9 @@ void Huffman::Decoding(Tree &arvore, Node *node,QBitArray Trash, QByteArray &cod
 
 void Huffman::descomprimir(QString exit, QString local){
     QFile file(exit);
-    if(!file.open(QIODevice::ReadOnly)){
-        cout<<"O arquivo comprimido n"<<char(198)<<"o p"<<char(147)<<"de ser aberto !\n";
-        exit(1);
-    }
+    if(!file.open(QIODevice::ReadOnly))
+        qFatal("O arquivo comprimido não pôde ser aberto !");
+
     QByteArray CodeCompress, CodTree, Final;
     CodeCompress = file.readAll();
     file.close();
@@ -276,18 +275,18 @@ void Huffman::descomprimir(QString exit, QString local){
     QString Out;
     Out = CodeCompress;
 
-    if(!local.isEmpty())
-        Out = local + Out;
+    if(!local.isEmpty()){
+        Out = local +'/'+ Out;
+    }
 
     Decoding(tree, node, DecodingTrash,Final, sizeTrash);
 
     //Escreve o novo arquivo
 
     QFile NewFile(Out);
-    if(!NewFile.open(QIODevice::WriteOnly)){
-        qDebug()<<"houve um problema para escrever o arquivo";
-        exit(1);
-    }
+    if(!NewFile.open(QIODevice::WriteOnly))
+        qFatal("houve um problema para escrever o arquivo");
+
     NewFile.write(Final);
     NewFile.close();
 }

@@ -31,9 +31,15 @@ private slots:
 
     void on_Decopress_bt_clicked();
 
+    void on_NavLocalOut_bt_clicked();
+
+    void on_checkBox_OutNav_clicked(bool checked);
+
 private:
     Ui::Gui *ui;
     QString Address;
+    QString LocalOut;
+    QString NameFile;
 };
 
 #endif // GUI_H
