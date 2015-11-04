@@ -5,14 +5,11 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
-#include <QTime>
 #include <QDebug>
 #include <QString>
 
 int main(int argc, char *argv[]){
 
-    QTime time;
-    time.start();
 
     QApplication app(argc, argv);
     Gui w;
@@ -45,22 +42,33 @@ int main(int argc, char *argv[]){
     parser.addOption(startGui);
     parser.process(app);
 
+
+
+
     //ARGUMENTS
-    if(parser.isSet(startGui))
+
+
+
+    if(app.arguments().size() == 1){
+        w.show();
+    }
+    else if(parser.isSet(startGui))
         w.show();
     else if(parser.isSet(compress)){
         Huff.comprimir(parser.value(compress), parser.value(outName));
+        qDebug()<<"Compressão realizada!";
         exit(0);
     }
     else if(Huff.IfHuff(app.arguments().at(1))){
         Huff.descomprimir(app.arguments().at(1), parser.value(local));
+        qDebug()<<"Descompressão realizada !";
         exit(0);
     }
     else{
         qDebug()<<qPrintable(parser.helpText());
     }
 
-    qDebug( "Tempo decorrido: %d milissegundos", time.elapsed() );
+
 
     return app.exec();
 }

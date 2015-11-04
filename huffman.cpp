@@ -11,7 +11,7 @@ bool lessthan(Node *a, Node *b){
 }
 //----------------------------------------------------------------------------------//
 
-QByteArray Huffman::fileCod(QByteArray data, QByteArray &trash, QHash<int, QByteArray> codes){
+QByteArray Huffman::FileCode(QByteArray data, QByteArray &trash, QHash<int, QByteArray> codes){
 
     //Codifica o arquivo com os valores da árvore
 
@@ -49,11 +49,11 @@ bool Huffman::IfHuff(QString Huffman){
 
 //----------------------------------------------------------------------------------//
 
-void Huffman::comprimir(QString entrada, QString saida){
+void Huffman::comprimir(QString Input, QString exit){
 
     int count[ascii]={0};
 
-    QFile file(entrada);
+    QFile file(Input);
 
     if(!file.open(QIODevice::ReadOnly)){
         cout<<"O arquivo n"<<char(198)<<"o pode ser aberto\n";
@@ -77,7 +77,7 @@ void Huffman::comprimir(QString entrada, QString saida){
             ListNode.append(node);
         }
     }
-    Tree tree; //Criar uma árvore para inserção dos nodes
+    Tree tree; //Criar uma árvore para inserir os nodes
 
     while (ListNode.size()!=1) {
         qSort(ListNode.begin(), ListNode.end(), lessthan);
@@ -86,22 +86,24 @@ void Huffman::comprimir(QString entrada, QString saida){
         ListNode.removeFirst();
         ListNode.append(node);
     }
-    tree.add(ListNode.at(0));
+    tree.add(ListNode.at(0)); // Adiciona o node na árvore
     //print(node,0);//Imprime a arvore
-    QHash<int, QByteArray> cod;
+
+    QHash<int, QByteArray> cod; //recebe os valores dos nós
 
     QByteArray Coding, lixo;
     QByteArray represent = tree.buildTree(node, cod);
-    Coding = fileCod(Data, lixo, cod); //representação binária da árvore
+    Coding = FileCode(Data, lixo, cod); //representação binária da árvore
 
     QByteArray DataOut; // recebe o conteúdo codificado
     Size(Coding, DataOut, represent);
-    DataOut.append(entrada.size()).append(entrada).append(represent).append(lixo);
+    QFileInfo GetName(Input); //Auxiliar para pegar o nome original
+    DataOut.append(GetName.fileName().size()).append(GetName.fileName()).append(represent).append(lixo);
 
-    if(saida.isEmpty())
-        saida = NameOut(entrada);
+    if(exit.isEmpty())
+        exit = NameOut(Input);
 
-    QFile newfile(saida); // Criação do arquivo comprimido
+    QFile newfile(exit); // Criação do arquivo comprimido
     if(!newfile.open(QIODevice::WriteOnly)){
         cout<< "Ocorreu um erro ao criar o arquivo comprimido !\n";
         exit(1);
@@ -109,7 +111,7 @@ void Huffman::comprimir(QString entrada, QString saida){
     newfile.write(DataOut);
     newfile.close(); // Compressão concluída.
 
-    qDebug()<<"Compressão realizada!";
+
 }
 
 //----------------------------------------------------------------------------------//
@@ -175,10 +177,15 @@ void Huffman::getHead(QByteArray bytes, int &sizeTrash, int &sizeTree, int &size
 
     QBitArray bits(24);
     // Converte de QByteArray para QBitArray
-    for(int i=0; i<3; ++i) {
-        for(int b=0; b<8;++b) {
-            bits.setBit( i*8+b, bytes.at(i)&(1<<(7-b)) );
-        }
+    for (int i = 0, c = 0; i < 3; ++i, c+=8) {
+        bits[0 + c] = bytes.at(i) & 0x80;
+        bits[1 + c] = bytes.at(i) & 0x40;
+        bits[2 + c] = bytes.at(i) & 0x20;
+        bits[3 + c] = bytes.at(i) & 0x10;
+        bits[4 + c] = bytes.at(i) & 0x08;
+        bits[5 + c] = bytes.at(i) & 0x04;
+        bits[6 + c] = bytes.at(i) & 0x02;
+        bits[7 + c] = bytes.at(i) & 0x01;
     }
     for (int i = 0; i < 3; ++i) {
         if(bits.at(i))
@@ -196,15 +203,15 @@ void Huffman::getHead(QByteArray bytes, int &sizeTrash, int &sizeTree, int &size
 
 //----------------------------------------------------------------------------------//
 
-void Huffman::Decoding(Tree &arvore, Node *node,QBitArray bit, QByteArray &code, int trash){
+void Huffman::Decoding(Tree &arvore, Node *node,QBitArray Trash, QByteArray &code, int SizeTrash){
 
     node = arvore.getRoot();
-    const int limit = bit.size()- trash;
+    const int limit = Trash.size()- SizeTrash;
 
     for (int i = 0; i < limit; ++i) {
 
         if(!arvore.leaf(node)){
-            if(bit[i])
+            if(Trash[i])
                 node = node->right;
             else
                 node = node->left;
@@ -218,8 +225,8 @@ void Huffman::Decoding(Tree &arvore, Node *node,QBitArray bit, QByteArray &code,
 
 //----------------------------------------------------------------------------------//
 
-void Huffman::descomprimir(QString saida, QString local){
-    QFile file(saida);
+void Huffman::descomprimir(QString exit, QString local){
+    QFile file(exit);
     if(!file.open(QIODevice::ReadOnly)){
         cout<<"O arquivo comprimido n"<<char(198)<<"o p"<<char(147)<<"de ser aberto !\n";
         exit(1);
@@ -227,8 +234,9 @@ void Huffman::descomprimir(QString saida, QString local){
     QByteArray CodeCompress, CodTree, Final;
     CodeCompress = file.readAll();
     file.close();
-    int sizeTrash = 0, sizeTree = 0, sizeName = 0;
-    getHead(CodeCompress, sizeTrash, sizeTree, sizeName);
+    int sizeTrash = 0, sizeTree = 0, sizeName = 0; // variáveis com os tamanhos
+
+    getHead(CodeCompress, sizeTrash, sizeTree, sizeName); //pega os tamanhos
 
     for (int i = (3 + sizeName); i < 3 + sizeName + sizeTree; ++i) {
         CodTree.append(CodeCompress.at(i)); //Guarda a codificaçãO do arquivo
@@ -239,24 +247,39 @@ void Huffman::descomprimir(QString saida, QString local){
     tree.mountTree(node, CodTree);
     //print(node,0);//Imprime a arvore
 
+    //----------------------------------------------------------------------------
     //Decodificação do Lixo -- bit to byte
 
-    int index = CodeCompress.size() - (CodeCompress.size()-3-sizeName-sizeTree);
-    QBitArray DecTrash((CodeCompress.size()-3-sizeName-sizeTree)*8);
 
-    for (int j = index, i = 0; j < CodeCompress.size(); ++j, ++i) {
-        for (int b = 0; b < 8; ++b)
-            DecTrash.setBit(i*8+b, CodeCompress.at(j)&(1<<(7-b)) );
+    int index = CodeCompress.size() - (CodeCompress.size()-3-sizeName-sizeTree);
+    QBitArray DecodingTrash((CodeCompress.size()-3-sizeName-sizeTree)*8);
+
+
+    for (int i = index, c = 0; i < CodeCompress.size(); ++i, c+=8) {
+        DecodingTrash[0 + c] = CodeCompress.at(i) & 0x80;
+        DecodingTrash[1 + c] = CodeCompress.at(i) & 0x40;
+        DecodingTrash[2 + c] = CodeCompress.at(i) & 0x20;
+        DecodingTrash[3 + c] = CodeCompress.at(i) & 0x10;
+        DecodingTrash[4 + c] = CodeCompress.at(i) & 0x08;
+        DecodingTrash[5 + c] = CodeCompress.at(i) & 0x04;
+        DecodingTrash[6 + c] = CodeCompress.at(i) & 0x02;
+        DecodingTrash[7 + c] = CodeCompress.at(i) & 0x01;
     }
+
+    //----------------------------------------------------------------------------
+
+    //Pega o nome Original do arquivo
 
     CodeCompress.remove(0, 3);
     CodeCompress.remove(sizeName, CodeCompress.size()-sizeName);
 
-    QString Out = CodeCompress; //guarda o nome original do arquivo
+    QString Out;
+    Out = CodeCompress;
+
     if(!local.isEmpty())
         Out = local + Out;
 
-    Decoding(tree, node, DecTrash,Final, sizeTrash);
+    Decoding(tree, node, DecodingTrash,Final, sizeTrash);
 
     //Escreve o novo arquivo
 
@@ -267,6 +290,4 @@ void Huffman::descomprimir(QString saida, QString local){
     }
     NewFile.write(Final);
     NewFile.close();
-
-    qDebug()<<"Descompressão realizada !";
 }

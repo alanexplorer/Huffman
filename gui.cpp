@@ -7,17 +7,17 @@ Gui::Gui(QWidget *parent) :
     ui->setupUi(this);
 
     //Image
-    QPixmap pex("C:/Users/conta/Documents/GitHub/Huffman/data/mk.png");
+    QPixmap pex("data/mk.png");
     ui->label_picture->setPixmap(pex);
     //Sound
 
     QMediaPlaylist *playlist = new QMediaPlaylist(this);
-    playlist->addMedia(QUrl::fromLocalFile("C:/Users/conta/Documents/GitHub/Huffman/data/mk.wav"));
+    playlist->addMedia(QUrl::fromLocalFile("data/mk.wav"));
     playlist->setPlaybackMode(QMediaPlaylist::Loop);
     playlist->setCurrentIndex(1);
     QMediaPlayer *player = new QMediaPlayer(this);
     player->setPlaylist(playlist);
-    player->setVolume(50);
+    player->setVolume(30);
     player->play();
 }
 
@@ -26,6 +26,7 @@ Gui::~Gui(){
 }
 
 void Gui::on_NavCompress_bt_clicked(){
+    QMessageBox msgBox;
     QString filename = QFileDialog::getOpenFileName(
                 this,
                 tr("Open File"),
@@ -34,7 +35,8 @@ void Gui::on_NavCompress_bt_clicked(){
                 );
     ui->nav_txt->setText(filename);
     if(filename != ""){
-        QMessageBox::information(this, "Compress", "File Added");
+        msgBox.setText("File Added");
+        msgBox.exec();
         Address = filename;
     }
     //File information
@@ -50,22 +52,39 @@ void Gui::on_NavCompress_bt_clicked(){
 }
 
 void Gui::on_Compress_bt_clicked(){
+    QMessageBox msgBox;
 
     if(Address.size()){
 
         Huffman Huff;
         Huff.comprimir(Address, "");
+        Address.clear();
+        ui->nav_txt->clear();
+        msgBox.setText("Compressed");
+        msgBox.exec();
     }
     else
-        QMessageBox::information(this, "Compress", "File Added");
+        QMessageBox::warning( this, tr("Compress"), tr("Enter the file address") );
 }
 
 void Gui::on_Decopress_bt_clicked(){
+    QMessageBox msgBox;
+    Huffman Huff;
     if(Address.size()){
-        Huffman Huff;
-        Huff.descomprimir(Address, "");
+        if(Huff.IfHuff(Address)){
+
+
+            Huff.descomprimir(Address, "");
+            Address.clear();
+            ui->nav_txt->clear();
+            msgBox.setText("Decompressed");
+            msgBox.exec();
+        }
+        else
+            QMessageBox::warning( this, tr("Compress"), tr("this isn't huff file") );
+
     }
     else
-        QMessageBox::information(this, "Descompress", "File Added");
+        QMessageBox::warning( this, tr("Compress"), tr("Enter the file address") );
 
 }
