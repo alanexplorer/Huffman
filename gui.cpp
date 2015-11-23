@@ -34,7 +34,6 @@ void Gui::on_NavCompress_bt_clicked(){
     size+=" byte";
     ui->SizeResult->setText(size);
 }
-
 void Gui::on_NavLocalOut_bt_clicked(){
 
     LocalOut = QFileDialog::getExistingDirectory(this, tr("Open Directory"),

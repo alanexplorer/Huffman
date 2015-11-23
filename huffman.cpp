@@ -1,4 +1,5 @@
 #include "huffman.h"
+#include "gui.h"
 #define ascii 256
 
 Huffman::Huffman(){
@@ -110,8 +111,6 @@ void Huffman::comprimir(QString Input, QString exit){
 
     newfile.write(DataOut);
     newfile.close(); // Compressão concluída.
-
-
 }
 
 //----------------------------------------------------------------------------------//

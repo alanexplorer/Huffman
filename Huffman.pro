@@ -23,3 +23,6 @@ HEADERS  += gui.h \
     node.h
 
 FORMS    += gui.ui
+
+RESOURCES += \
+    icon.qrc

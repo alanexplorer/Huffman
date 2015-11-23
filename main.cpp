@@ -7,8 +7,12 @@
 #include <QCommandLineOption>
 #include <QDebug>
 #include <QString>
+#include <QTime>
 
 int main(int argc, char *argv[]){
+
+    QTime t;
+    t.start();
 
 
     QApplication app(argc, argv);
@@ -67,8 +71,6 @@ int main(int argc, char *argv[]){
     else{
         qDebug()<<qPrintable(parser.helpText());
     }
-
-
-
+    qDebug("Time elapsed: %d ms", t.elapsed());
     return app.exec();
 }
